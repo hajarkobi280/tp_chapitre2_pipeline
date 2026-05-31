@@ -3,8 +3,8 @@
 db_path = "ventes.duckdb"
 con = duckdb.connect(db_path)
 
-# Créer la table nettoyée
-con.execute(\"\"\"
+# Creer la table nettoyee
+con.execute("""
     CREATE OR REPLACE TABLE ventes_clean AS
     SELECT 
         date,
@@ -16,10 +16,10 @@ con.execute(\"\"\"
         quantite * prix_unitaire AS chiffre_affaires
     FROM ventes_raw
     WHERE quantite > 0 AND prix_unitaire > 0
-\"\"\")
+""")
 
-# Créer le résumé par catégorie
-con.execute(\"\"\"
+# Creer le resume par categorie
+con.execute("""
     CREATE OR REPLACE TABLE ventes_resume AS
     SELECT 
         categorie,
@@ -27,7 +27,7 @@ con.execute(\"\"\"
         SUM(chiffre_affaires) AS total_ca
     FROM ventes_clean
     GROUP BY categorie
-\"\"\")
+""")
 
 con.close()
 print("Transformation terminee : ventes_clean et ventes_resume creees")
